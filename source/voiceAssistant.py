@@ -2,6 +2,7 @@ from datetime import date, datetime
 import speech_recognition
 import pyttsx3
 import wikipedia
+import os
 
 robotEar = speech_recognition.Recognizer()													# robotEar: bien nhan am thanh
 robotMouth = pyttsx3.init()																	# robotMoutth: bien phat am thanh
@@ -36,6 +37,8 @@ while True:
 	elif "time" in you:
 		now = datetime.now()
 		robotBrain = now.strftime("%H hours %M minutes %S seconds")
+	elif "notepad" and "open" in you:
+		os.system("notepad")
 	elif "bye" in you:
 		robotBrain = "Good bye, Toan"
 		voices = robotMouth.getProperty('voices')  
