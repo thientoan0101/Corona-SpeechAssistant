@@ -3,11 +3,22 @@ import speech_recognition
 import pyttsx3
 import wikipedia
 import os
+import subprocess
 
 robotEar = speech_recognition.Recognizer()													# robotEar: bien nhan am thanh
 robotMouth = pyttsx3.init()																	# robotMoutth: bien phat am thanh
 robotBrain = ""																				# robotBrain: bien nhan noi dung phan hoi lai
 
+def openApp(name):								#hàm tìm đường dẫn và mở app
+	appPath = ""
+	for root, dirs, files in os.walk("C:\\"):
+		if name in files:
+			appPath = os.path.join(root, name)
+	if(appPath):
+		subprocess.call(appPath)
+	else:
+		global robotBrain
+		robotBrain = "App not found"
 while True:
 	with speech_recognition.Microphone() as mic:		
 		robotEar.adjust_for_ambient_noise(mic)
@@ -19,8 +30,8 @@ while True:
 		you = robotEar.recognize_google(audio)
 	except:
 		you = ""
-	
-	
+	you = you.lower()								#lowercase input để dễ so sánh 
+	print("You: ", you)
 	if you == "":
 		robotBrain = "Sorry, please say again"
 	elif "can you hear me" in you:
@@ -37,8 +48,21 @@ while True:
 	elif "time" in you:
 		now = datetime.now()
 		robotBrain = now.strftime("%H hours %M minutes %S seconds")
-	elif "notepad" and "open" in you:
-		os.system("notepad")
+	elif "open" in you:
+		if "notepad" in you:
+			openApp("notepad.exe")
+		elif "excel" in you:
+			openApp("EXCEL.EXE")
+		elif "powerpoint" in you:
+			openApp("POWERPNT.EXE")
+		elif "word" in you:
+			openApp("WINWORD.EXE")
+		elif "calculator" in you:
+			openApp("calc.exe")
+		elif "microsoft" in you and "edge" in you:
+			openApp("msedge.exe")
+		elif "chrome" in you:
+			openApp("chrome.exe")
 	elif "bye" in you:
 		robotBrain = "Good bye, Toan"
 		voices = robotMouth.getProperty('voices')  
